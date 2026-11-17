@@ -7,8 +7,8 @@ interface ShopData {
   }
 }
 
-export const loader = async ({request}: {request: Request}) => {
-  const {admin} = await authenticate.admin(request);
+export const loader = async ({ request }: { request: Request }) => {
+  const { admin } = await authenticate.admin(request);
   const response = await admin.graphql(`#graphql
   query {
     collections(first: 10, query: "*") {
@@ -25,14 +25,30 @@ export const loader = async ({request}: {request: Request}) => {
   );
   const json = await response.json();
   console.log(json.data);
-  return json.data;  
+  return json.data;
 }
 
 export default function SalvaPage() {
   const shopData: any = useLoaderData();
   console.log(shopData.collections.edges);
   return (
-    <s-page heading="Salva1 Page"  >
+    <s-page heading="Products">
+      <s-section heading="Collections">
+        {/* <s-ordered-list>
+          {shopData.collections.edges.map((edge: any) => (
+            <s-list-item key={edge.node.id}>{edge.node.title}</s-list-item>
+          ))}
+        </s-ordered-list> */}
+        <s-ordered-list>
+          {shopData.collections.edges.map((edge: any) => (
+            <s-list-item key={edge.node.id}>
+              <s-text>{edge.node.title}</s-text>
+              <s-text>{edge.node.handle}</s-text>
+              <s-text>{edge.node.updatedAt}</s-text>
+            </s-list-item>
+          ))}
+        </s-ordered-list>
+      </s-section>
       <s-section slot="aside" heading="Resources">
         <s-unordered-list>
           <s-list-item>
